@@ -25,10 +25,13 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
 setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
 
 // Create a Person object which is shared between WASM and JS
-const person = new Person(2343);
+const person = new Person(2343, "John");
+
+// Automatically call the setter on the Rust side
+person.name = "Jane";
 
 // Call the greet function from WASM with the
-greet("John", person);
+greet(person);
 
 // Don't forget to free the WASM memory when you're done with the shared object!
 person.free();
