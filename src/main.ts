@@ -2,7 +2,12 @@ import "./style.css";
 import typescriptLogo from "./typescript.svg";
 import viteLogo from "/vite.svg";
 import { setupCounter } from "./counter.ts";
-import { greet, Person } from "wasm-on-web";
+import {
+  greet,
+  owned_mutable_greet,
+  Person,
+  remote_instance_param,
+} from "wasm-on-web";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div>
@@ -22,6 +27,14 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   </div>
 `;
 
+class TSDef {
+  constructor(public id: string) {}
+
+  run() {
+    console.log(this.id);
+  }
+}
+
 setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
 
 // Create a Person object which is shared between WASM and JS
@@ -31,7 +44,15 @@ const person = new Person(2343, "John");
 person.name = "Jane";
 
 // Call the greet function from WASM with the
-greet(person);
+//// greet(person);
 
 // Don't forget to free the WASM memory when you're done with the shared object!
 person.free();
+
+// const str = "Hello";
+// owned_mutable_greet(str);
+// alert(str);
+
+const tsdef = new TSDef("abcd");
+remote_instance_param(tsdef);
+// alert(tsdef.id);
